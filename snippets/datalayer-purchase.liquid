@@ -1,0 +1,41 @@
+{% comment %}
+  Fires the GA4 `purchase` event on the order status page (thank_you).
+  Guarded by a Shopify `first_time_accessed` flag so it only fires once
+  per order, even if the customer refreshes.
+
+  Called from layout/theme.liquid inside an `{% if template == "customers/order" %}`
+  or from the order status additional scripts field in Shopify admin.
+{% endcomment %}
+
+{% if first_time_accessed %}
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ ecommerce: null });
+
+  window.dataLayer.push({
+    event: 'purchase',
+    ecommerce: {
+      transaction_id: {{ order.order_number | json }},
+      affiliation: {{ shop.name | json }},
+      value: {{ order.total_price | divided_by: 100.0 | json }},
+      tax: {{ order.total_tax | divided_by: 100.0 | json }},
+      shipping: {{ order.shipping_price | divided_by: 100.0 | json }},
+      currency: {{ order.currency | json }},
+      coupon: {% if order.discount_applications.first %}{{ order.discount_applications.first.title | json }}{% else %}""{% endif %},
+      items: [
+        {% for line_item in order.line_items %}
+          {
+            item_id: {{ line_item.sku | default: line_item.variant_id | json }},
+            item_name: {{ line_item.product.title | json }},
+            item_brand: {{ line_item.vendor | json }},
+            item_category: {{ line_item.product.type | json }},
+            item_variant: {{ line_item.variant.title | json }},
+            price: {{ line_item.price | divided_by: 100.0 | json }},
+            quantity: {{ line_item.quantity | json }}
+          }{% unless forloop.last %},{% endunless %}
+        {% endfor %}
+      ]
+    }
+  });
+</script>
+{% endif %}

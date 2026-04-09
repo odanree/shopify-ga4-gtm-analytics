@@ -1,0 +1,85 @@
+<!doctype html>
+<html class="no-js" lang="{{ request.locale.iso_code }}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="">
+    <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- if settings.favicon != blank -%}
+      <link rel="icon" type="image/png" href="{{ settings.favicon | img_url: '32x32' }}">
+    {%- endif -%}
+
+    <title>
+      {{ page_title }}
+      {%- if current_tags %} &ndash; tagged "{{ current_tags | join: ', ' }}"{% endif -%}
+      {%- if current_page != 1 %} &ndash; Page {{ current_page }}{% endif -%}
+      {%- unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless -%}
+    </title>
+
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+
+    {%- comment -%} === ANALYTICS: GTM head snippet (before all other scripts) {%- endcomment -%}
+    {%- render 'gtm-head' -%}
+
+    {%- comment -%} === ANALYTICS: Facebook Pixel base code {%- endcomment -%}
+    {%- render 'facebook-pixel' -%}
+
+    {%- comment -%}
+      Facebook ViewContent deduplication: store a server-generated event_id
+      in a meta tag so capi.js can reference it without a second server call.
+    {%- endcomment -%}
+    {%- if template == 'product' -%}
+      <meta name="fb-view-event-id" content="ViewContent_{{ product.id }}_{{ 'now' | date: '%s' }}">
+      <meta name="product-variant-id" content="{{ product.selected_or_first_available_variant.id }}">
+    {%- endif -%}
+
+    {{ content_for_header }}
+
+    {%- liquid
+      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
+      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
+      assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
+    %}
+
+    {% style %}
+      {{ settings.type_body_font | font_face: font_display: 'swap' }}
+      {{ body_font_bold | font_face: font_display: 'swap' }}
+      {{ body_font_italic | font_face: font_display: 'swap' }}
+      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
+      {{ settings.type_header_font | font_face: font_display: 'swap' }}
+
+      :root {
+        --font-body-family: {{ settings.type_body_font.family }}, {{ settings.type_body_font.fallback_families }};
+        --font-body-style: {{ settings.type_body_font.style }};
+        --font-body-weight: {{ settings.type_body_font.weight }};
+        --font-heading-family: {{ settings.type_header_font.family }}, {{ settings.type_header_font.fallback_families }};
+        --color-base-background-1: {{ settings.colors_background_1.red }}, {{ settings.colors_background_1.green }}, {{ settings.colors_background_1.blue }};
+        --color-base-accent-1: {{ settings.colors_accent_1.red }}, {{ settings.colors_accent_1.green }}, {{ settings.colors_accent_1.blue }};
+      }
+    {% endstyle %}
+
+    {{ 'base.css' | asset_url | stylesheet_tag }}
+
+    <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
+  </head>
+
+  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+
+    {%- comment -%} === ANALYTICS: GTM noscript body snippet {%- endcomment -%}
+    {%- render 'gtm-body' -%}
+
+    {{ content_for_layout }}
+
+    {%- comment -%} === ANALYTICS: purchase event on thank_you / order status page {%- endcomment -%}
+    {%- if template == 'customers/order' or request.page_type == 'thank_you' -%}
+      {%- render 'datalayer-purchase' -%}
+    {%- endif -%}
+
+    {{ 'analytics.js' | asset_url | script_tag }}
+    {{ 'capi.js' | asset_url | script_tag }}
+  </body>
+</html>

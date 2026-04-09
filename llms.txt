@@ -1,0 +1,49 @@
+# Shopify GA4 + GTM Analytics Demo Store
+
+> A Shopify Dawn-fork demonstrating a production-grade analytics tracking layer
+> with GA4 event tracking, Google Tag Manager, Facebook Pixel/CAPI dual-firing,
+> and structured data for SEO and AI discoverability.
+
+## About this store
+
+This Shopify theme fork demonstrates how to implement a complete analytics
+layer on a Shopify storefront. It is intended as a technical portfolio project
+and reference implementation.
+
+## Products
+
+All products in this store are demo items for analytics testing purposes.
+Purchases do not fulfill real orders.
+
+## Analytics implementation
+
+### Events tracked
+
+| Event | Trigger | Layer |
+|-------|---------|-------|
+| view_item | Product page load | GTM dataLayer (server-rendered) |
+| add_to_cart | ATC button click | GTM dataLayer + Facebook Pixel + CAPI |
+| remove_from_cart | Cart remove link | GTM dataLayer |
+| view_cart | Cart drawer open / cart page | GTM dataLayer |
+| begin_checkout | Checkout button | GTM dataLayer + Facebook Pixel |
+| purchase | Order status page | GTM dataLayer + Facebook CAPI |
+| select_item | Product card click | GTM dataLayer |
+
+### Structured data
+
+Every product page includes:
+- `Product` JSON-LD schema (offers per variant, aggregate rating)
+- Open Graph meta tags
+
+### Technology
+
+- Shopify Dawn theme fork
+- Google Tag Manager
+- GA4 (via GTM)
+- Facebook Pixel (browser) + Conversions API (server-side)
+- JSON-LD / schema.org
+- Shopify Liquid, JavaScript
+
+## Source
+
+GitHub: https://github.com/danh-le/shopify-ga4-gtm-analytics

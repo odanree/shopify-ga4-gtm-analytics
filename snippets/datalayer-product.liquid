@@ -1,0 +1,36 @@
+{% comment %}
+  Pushes a view_item event to the GTM dataLayer on product pages.
+  Rendered server-side so product data is always available even before
+  JS hydrates. Called from sections/main-product.liquid.
+
+  Expected context variable: `product` (Shopify product object)
+  Expected context variable: `current_variant` (selected variant)
+{% endcomment %}
+
+<script>
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ ecommerce: null }); // clear previous ecommerce object
+
+  window.dataLayer.push({
+    event: 'view_item',
+    ecommerce: {
+      currency: {{ cart.currency.iso_code | json }},
+      value: {{ current_variant.price | divided_by: 100.0 | json }},
+      items: [
+        {
+          item_id: {{ current_variant.sku | default: current_variant.id | json }},
+          item_name: {{ product.title | json }},
+          item_brand: {{ product.vendor | json }},
+          item_category: {{ product.type | json }},
+          {% for collection in product.collections limit: 3 %}
+            {% if forloop.first %}item_category2: {{ collection.title | json }},{% endif %}
+          {% endfor %}
+          item_variant: {{ current_variant.title | json }},
+          price: {{ current_variant.price | divided_by: 100.0 | json }},
+          quantity: 1,
+          currency: {{ cart.currency.iso_code | json }}
+        }
+      ]
+    }
+  });
+</script>

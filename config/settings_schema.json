@@ -1,0 +1,78 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Dawn Analytics Fork",
+    "theme_version": "1.0.0",
+    "theme_author": "Danh Le",
+    "theme_documentation_url": "https://github.com/danh-le/shopify-ga4-gtm-analytics",
+    "theme_support_url": "https://github.com/danh-le/shopify-ga4-gtm-analytics/issues"
+  },
+  {
+    "name": "Analytics",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Google Tag Manager"
+      },
+      {
+        "type": "text",
+        "id": "gtm_container_id",
+        "label": "GTM Container ID",
+        "info": "Format: GTM-XXXXXXX. Leave blank to disable GTM.",
+        "placeholder": "GTM-XXXXXXX"
+      },
+      {
+        "type": "header",
+        "content": "Facebook / Meta"
+      },
+      {
+        "type": "text",
+        "id": "facebook_pixel_id",
+        "label": "Facebook Pixel ID",
+        "info": "Your 15–16 digit Pixel ID. Leave blank to disable Pixel.",
+        "placeholder": "123456789012345"
+      },
+      {
+        "type": "checkbox",
+        "id": "facebook_capi_enabled",
+        "label": "Enable Conversions API (server-side)",
+        "default": true,
+        "info": "Requires CAPI proxy endpoint to be deployed. See docs/capi-setup.md."
+      }
+    ]
+  },
+  {
+    "name": "Colors",
+    "settings": [
+      {
+        "type": "color",
+        "id": "colors_background_1",
+        "label": "Background 1",
+        "default": "#FFFFFF"
+      },
+      {
+        "type": "color",
+        "id": "colors_accent_1",
+        "label": "Accent 1",
+        "default": "#121212"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "assistant_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_header_font",
+        "label": "Heading font",
+        "default": "assistant_n4"
+      }
+    ]
+  }
+]

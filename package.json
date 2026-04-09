@@ -1,0 +1,21 @@
+{
+  "name": "shopify-ga4-gtm-analytics",
+  "version": "1.0.0",
+  "private": true,
+  "description": "GA4 + GTM analytics tracking layer on a Shopify Dawn fork with Facebook Pixel/CAPI and JSON-LD structured data",
+  "scripts": {
+    "dev": "shopify theme dev",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull",
+    "check": "shopify theme check",
+    "validate:jsonld": "node scripts/validate-jsonld.js",
+    "validate:gtm": "node scripts/validate-gtm-datalayer.js"
+  },
+  "devDependencies": {
+    "@shopify/cli": "^3.0.0",
+    "@shopify/theme-check-node": "^2.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
